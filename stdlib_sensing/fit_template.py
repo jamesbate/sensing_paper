@@ -2,11 +2,10 @@
 object employing it. This acts as a fitting template. 
 """
 ##-------------------------------PREAMBLE-----------------------------------##
-import numpy as np 
-import matplotlib.pyplot as plt 
+import numpy as np
 from lmfit import minimize, Parameters, fit_report 
-from stdlib.plots import PlotTemplate
-from stdlib.plots.plot_error_joint import plot_error_joint
+from stdlib_sensing import PlotTemplate
+
 ##-------------------------------CLASS DEFINITION-----------------------------------##
 
 class FitTemplate(): 
@@ -49,25 +48,6 @@ class FitTemplate():
             self.fit_result_error_dict.update({name: param.stderr})
         return self.fit_result
 
-    def plot_fit_errorcurves(self, x, y, dy,args_0,args_1, args_2, ax = None, color = 'g', label = None, fill = False, xlabel = 'pick xlabel', ylabel = 'pick ylabel', title = "pick title", more_points_number = None):
-        """wrapper around the plot_fit_curve function 
-        """
-        #args of form [params_dict, kwargs]
-
-        [params_dict_0, kwargs_0] = args_0
-        [params_dict_1, kwargs_1] = args_1
-        [params_dict_2, kwargs_2] = args_2
-
-        if more_points_number is not None:
-            x_more_points = np.linspace(x[0], x[-1], 100)
-        else:
-            x_more_points = x
-        y_0 = self.fit_function(x_more_points, params_dict_0, **kwargs_0)
-        y_lower = self.fit_function(x_more_points, params_dict_1, **kwargs_1)
-        y_upper = self.fit_function(x_more_points, params_dict_2, **kwargs_2)
-        dy = dy.reshape((1, dy.size))[0]#or else errorbar plot complains
-        plot_error_joint(x, y, dy,y_0,y_lower.ravel(), y_upper.ravel(), ax = ax, color = color, label = label, fill = fill, xlabel = xlabel, ylabel =ylabel, title = title, more_points_number = more_points_number)
-    
     def plot_fit_optcurve(self, x, parameters = None,points = None,xlabel = None, ylabel = None, title = None, label = None, ax = None, c = None, colour_index = None,**kwargs):
         """This function plots the curve of the optimum set of parameters. If parameters argument given, this overrides optimum parameters and 
         plots custom parameters. 
@@ -104,7 +84,7 @@ class FitTemplate():
         return y
 
 
-    def plot_fit(self, x, y, xlabel = None, ylabel = None, title = None, errorbars = None, label = None, ax = None, c = None, colour_index = None, error_lines = False,**kwargs): 
+    def plot_fit(self, x, y, xlabel = None, ylabel = None, title = None, errorbars = None, label = None, ax = None, c = None, colour_index = None, **kwargs):
         """Full plotting function. 
         """
         #Use plot template if no ax argument given
@@ -119,18 +99,6 @@ class FitTemplate():
             color = plot_template.colours[colour_index]
         else: 
             color = plot_template.colours[0]
-
-        #First check if error lines are requested
-        if error_lines is not False: 
-            if error_lines == 'filled':
-                fill = True
-            else:
-                fill = False
-            args_0 = [self.fit_result_params, kwargs]
-            args_1 = [self.fit_result_lower_params, kwargs]
-            args_2 = [self.fit_result_upper_params, kwargs]
-            self.plot_fit_errorcurves(x, y, errorbars,args_0,args_1, args_2, ax = ax, color = color, label = label, fill = fill, xlabel = xlabel, ylabel = ylabel, title = title)
-            return y 
         
         #if error plot not requested, go ahead with standard plot
         #scatter plot
