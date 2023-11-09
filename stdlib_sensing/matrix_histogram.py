@@ -82,19 +82,19 @@ def matrix_histogram(M, xlabels=None, ylabels=None, title=None, limits=None,
         ax.set_title(title)
 
     # x axis
-    ax.axes.w_xaxis.set_major_locator(plt.IndexLocator(1, -0.5))
+    ax.axes.xaxis.set_major_locator(plt.IndexLocator(1, -0.5))
     if xlabels is not None:
         ax.set_xticklabels(xlabels)
     ax.tick_params(axis='x', labelsize=14)
 
     # y axis
-    ax.axes.w_yaxis.set_major_locator(plt.IndexLocator(1, -0.5))
+    ax.axes.yaxis.set_major_locator(plt.IndexLocator(1, -0.5))
     if ylabels is not None:
         ax.set_yticklabels(ylabels)
     ax.tick_params(axis='y', labelsize=14)
 
     # z axis
-    ax.axes.w_zaxis.set_major_locator(plt.IndexLocator(1, 0.5))
+    ax.axes.zaxis.set_major_locator(plt.IndexLocator(1, 0.5))
     #ax.axes.w_zaxis.set_major_locator(plt.IndexLocator(1, 0.25))
     ax.set_zlim3d([min(z_min, 0), z_max])
 
